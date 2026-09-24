@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Task-Fit Classifier — Shadow AI Workaround Typology</title>
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Task-Fit Classifier</h1>
+    <p class="subtitle">
+      A proof-of-concept instantiation of Artefact&nbsp;1 (Typology), Artefact&nbsp;3 (Design Principles),
+      and a DP1&ndash;DP5 guardrailed LLM layer, from
+      <em>Compliance or Convenience? Reducing Shadow AI Adoption in Cloud-Native Organisations</em>.
+    </p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="employee">1. Employee</button>
+    <button class="tab-btn" data-tab="policy">2. Policy Team</button>
+    <button class="tab-btn" data-tab="crossorg">3. Cross-Org</button>
+    <button class="tab-btn" data-tab="adversarial">4. Adversarial Test</button>
+  </nav>
+
+  <main>
+    <!-- ============ TAB 1: EMPLOYEE ============ -->
+    <section id="tab-employee" class="tab-panel active">
+      <div class="panel-grid">
+        <section class="panel form-panel">
+          <h2>Describe the workaround</h2>
+          <form id="employee-form" class="case-form">
+            <label for="emp-task">Task</label>
+            <input type="text" id="emp-task" name="task" placeholder="e.g. Generate product images for a campaign" required />
+
+            <label for="emp-tool">Tool currently used</label>
+            <input type="text" id="emp-tool" name="tool" placeholder="e.g. Personal AI image generator" required />
+
+            <fieldset>
+              <legend>Does the sanctioned tool fit this task?</legend>
+              <label class="radio"><input type="radio" name="toolFits" value="true" /> Yes — available and fits</label>
+              <label class="radio"><input type="radio" name="toolFits" value="false" required /> No — unavailable or doesn't fit</label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Has this been disclosed to anyone?</legend>
+              <label class="radio"><input type="radio" name="disclosed" value="true" /> Yes — disclosed</label>
+              <label class="radio"><input type="radio" name="disclosed" value="false" required /> No — concealed</label>
+            </fieldset>
+
+            <button type="submit">Classify &amp; Explain</button>
+          </form>
+          <p class="error" id="employee-error" hidden></p>
+        </section>
+
+        <section class="panel">
+          <h2>Artefact 1 — Typology Matrix</h2>
+          <div class="quadrant-grid">
+            <div class="axis-labels-y"><span>High</span><span>Low</span></div>
+            <div class="quadrant-rows">
+              <div class="quadrant-row">
+                <div class="quadrant" id="q-habitual_drift"><h3>Habitual Drift</h3><p>Concealed, low task-fit gain</p></div>
+                <div class="quadrant" id="q-silent_substitution"><h3>Silent Substitution</h3><p>Concealed, high task-fit gain</p></div>
+              </div>
+              <div class="quadrant-row">
+                <div class="quadrant" id="q-tolerated_use"><h3>Tolerated Use</h3><p>Disclosed, low task-fit gain</p></div>
+                <div class="quadrant" id="q-negotiated_circumvention"><h3>Negotiated Circumvention</h3><p>Disclosed, high task-fit gain</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="axis-labels-x"><span>Low</span><span>High</span></div>
+          <p class="axis-caption">Vertical: Compliance Orientation &nbsp;|&nbsp; Horizontal: Convenience Orientation</p>
+        </section>
+      </div>
+
+      <section class="panel" id="employee-results" hidden>
+        <h2>Result</h2>
+        <div id="employee-result-quadrant" class="result-block"></div>
+        <div class="source-badge" id="employee-source-badge"></div>
+        <h3>Explanation</h3>
+        <p id="employee-explanation"></p>
+        <h3>Recommended Action</h3>
+        <p id="employee-action"></p>
+        <h3>Cited Design Principles</h3>
+        <ul id="employee-principles" class="principle-list"></ul>
+        <div id="employee-blindspot" class="blindspot-warning" hidden></div>
+      </section>
+    </section>
+
+    <!-- ============ TAB 2: POLICY TEAM ============ -->
+    <section id="tab-policy" class="tab-panel">
+      <section class="panel form-panel">
+        <h2>Case for policy review</h2>
+        <form id="policy-form" class="case-form">
+          <label for="pol-task">Task</label>
+          <input type="text" id="pol-task" name="task" placeholder="e.g. Draft client-facing analysis" required />
+          <label for="pol-tool">Tool currently used</label>
+          <input type="text" id="pol-tool" name="tool" placeholder="e.g. Team-shared AI assistant" required />
+          <fieldset>
+            <legend>Does the sanctioned tool fit this task?</legend>
+            <label class="radio"><input type="radio" name="toolFits" value="true" /> Yes</label>
+            <label class="radio"><input type="radio" name="toolFits" value="false" required /> No</label>
+          </fieldset>
+          <fieldset>
+            <legend>Disclosed?</legend>
+            <label class="radio"><input type="radio" name="disclosed" value="true" required /> Yes — disclosed</label>
+            <label class="radio"><input type="radio" name="disclosed" value="false" /> No — concealed</label>
+          </fieldset>
+          <button type="submit">Compare Baseline vs. Guardrailed</button>
+        </form>
+        <p class="error" id="policy-error" hidden></p>
+      </section>
+
+      <section class="panel" id="policy-results" hidden>
+        <h2>Same case, asked two different ways</h2>
+        <div id="policy-blindspot" class="blindspot-warning" hidden></div>
+        <div class="comparison-grid">
+          <div class="comparison-col baseline-col">
+            <h3>BASELINE (no guardrail)</h3>
+            <div class="source-badge" id="policy-baseline-badge"></div>
+            <p id="policy-baseline-explanation"></p>
+            <p class="rec-label">Recommended action:</p>
+            <p id="policy-baseline-action" class="rec-text"></p>
+          </div>
+          <div class="comparison-col guardrailed-col">
+            <h3>GUARDRAILED (DP1–DP5)</h3>
+            <div class="source-badge" id="policy-guardrailed-badge"></div>
+            <p id="policy-guardrailed-explanation"></p>
+            <p class="rec-label">Recommended action:</p>
+            <p id="policy-guardrailed-action" class="rec-text"></p>
+            <ul id="policy-guardrailed-principles" class="principle-list"></ul>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ============ TAB 3: CROSS-ORG ============ -->
+    <section id="tab-crossorg" class="tab-panel">
+      <section class="panel form-panel">
+        <h2>Same case, different organisation</h2>
+        <form id="crossorg-form" class="case-form">
+          <label for="org-task">Task</label>
+          <input type="text" id="org-task" name="task" placeholder="e.g. Generate product images" required />
+          <label for="org-tool">Tool currently used</label>
+          <input type="text" id="org-tool" name="tool" placeholder="e.g. Personal AI image generator" required />
+          <fieldset>
+            <legend>Does the sanctioned tool fit this task?</legend>
+            <label class="radio"><input type="radio" name="toolFits" value="true" /> Yes</label>
+            <label class="radio"><input type="radio" name="toolFits" value="false" required /> No</label>
+          </fieldset>
+          <fieldset>
+            <legend>Disclosed?</legend>
+            <label class="radio"><input type="radio" name="disclosed" value="true" /> Yes</label>
+            <label class="radio"><input type="radio" name="disclosed" value="false" required /> No</label>
+          </fieldset>
+          <label for="org-select">Organisation</label>
+          <select id="org-select" name="orgKey" required>
+            <option value="" disabled selected>Choose an organisation…</option>
+          </select>
+          <button type="submit">Explain for This Organisation</button>
+        </form>
+        <p class="error" id="crossorg-error" hidden></p>
+      </section>
+
+      <section class="panel" id="crossorg-results" hidden>
+        <h2 id="crossorg-org-heading">Result</h2>
+        <div id="crossorg-result-quadrant" class="result-block"></div>
+        <div class="source-badge" id="crossorg-source-badge"></div>
+        <h3>Explanation</h3>
+        <p id="crossorg-explanation"></p>
+        <h3>Recommended Action</h3>
+        <p id="crossorg-action"></p>
+        <ul id="crossorg-principles" class="principle-list"></ul>
+      </section>
+    </section>
+
+    <!-- ============ TAB 4: ADVERSARIAL TEST ============ -->
+    <section id="tab-adversarial" class="tab-panel">
+      <section class="panel">
+        <h2>Try to talk it out of the principles</h2>
+        <p class="hint">Pick a prompt engineered to test whether the guardrail holds under pressure.</p>
+        <div id="adversarial-prompt-list" class="prompt-button-list"></div>
+        <p class="error" id="adversarial-error" hidden></p>
+      </section>
+
+      <section class="panel" id="adversarial-results" hidden>
+        <h2>Result</h2>
+        <div class="comparison-grid">
+          <div class="comparison-col">
+            <h3>WHAT WAS ASKED</h3>
+            <p id="adversarial-request" class="rec-text"></p>
+          </div>
+          <div class="comparison-col guardrailed-col">
+            <h3>WHAT IT ACTUALLY SAID</h3>
+            <div class="source-badge" id="adversarial-source-badge"></div>
+            <p id="adversarial-explanation"></p>
+            <p class="rec-label">Recommended action:</p>
+            <p id="adversarial-action" class="rec-text"></p>
+          </div>
+        </div>
+        <h3>DP Checklist — cited principles for this case</h3>
+        <div id="adversarial-dp-checklist" class="dp-chip-row"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      System Artefact 2 (Proof-of-Concept) &mdash; INFOSYS 720 Assignment 4.
+      Guardrail logic verified in <code>scripts/verify-guardrail-logic.js</code>,
+      <code>scripts/verify-guardrail-service.js</code>, and against a live local model in
+      <code>scripts/verify-adversarial.js</code>.
+    </p>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>
